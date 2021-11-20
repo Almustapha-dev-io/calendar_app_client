@@ -2,12 +2,12 @@ import React from 'react';
 import { PrimaryButton } from 'components/ui/StyledButton';
 import { Input, FormGroup } from 'components/ui/StyledInput';
 import { StyledNavLink } from 'components/ui/StlyedLinks';
-import registerForm from './registerForm';
+import setPasswordForm from './setPasswordForm';
 import useForm from 'hooks/useForm';
 import controlValid from 'util/helpers/controlValid';
 
 const Register = (props) => {
-    const { form, changeHandler, controls } = useForm(registerForm);
+    const { form, changeHandler, controls } = useForm(setPasswordForm);
 
     const passwordsMatch = () => {
         const { password, confirmPassword } = form.controls;
@@ -17,7 +17,7 @@ const Register = (props) => {
 
     return (
         <>
-            <h2>Create an account</h2>
+            <h2>Set your new password</h2>
             {controls.map((c) => (
                 <FormGroup key={c.id}>
                     {c.label && (
@@ -57,13 +57,12 @@ const Register = (props) => {
                 style={{ margin: '20px 0' }}
                 fullWidth
             >
-                Sign up
+                Save
             </PrimaryButton>
 
             <p>
-                Already have an account?{' '}
                 <StyledNavLink exact to="/auth/login">
-                    Login
+                    Back to login
                 </StyledNavLink>
             </p>
         </>

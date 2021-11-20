@@ -5,6 +5,7 @@ import { AuthWrapper, AuthContent } from 'components/ui/PageWrapper';
 import Login from './Login';
 import RecoverPassword from './RecoverPassword';
 import Register from './Register';
+import SetPassword from './SetPassword';
 
 const Auth = () => {
     const { path } = useRouteMatch();
@@ -14,6 +15,7 @@ const Auth = () => {
         { path: `${path}/login`, component: Login },
         { path: `${path}/recover-password`, component: RecoverPassword },
         { path: `${path}/register`, component: Register },
+        { path: `${path}/set-password`, component: SetPassword },
     ];
 
     return (

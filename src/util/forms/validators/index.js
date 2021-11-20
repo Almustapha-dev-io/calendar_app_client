@@ -3,7 +3,7 @@ export const minLengthValidator = (str, requiredLength) => {
 };
 
 export const maxLengthValidator = (str, requiredLength) => {
-    return str.trim().length >= requiredLength;
+    return str.trim().length <= requiredLength;
 }
 
 export const patternValidator = (str, pattern) => {
