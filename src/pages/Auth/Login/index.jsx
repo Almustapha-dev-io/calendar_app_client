@@ -5,6 +5,7 @@ import { Input, FormGroup } from 'components/ui/StyledInput';
 import { StyledNavLink } from 'components/ui/StlyedLinks';
 import loginForm from './loginForm';
 import useForm from 'hooks/useForm';
+import controlValid from 'util/helpers/controlValid';
 
 const links = [
     {
@@ -20,15 +21,8 @@ const links = [
 ];
 
 
-const controlValid = (control) => {
-    if (!control.touched) return true;
-    return control.valid && control.validation;
-};
-
-
 const Login = (props) => {
     const { form, changeHandler, controls } = useForm(loginForm);
-
 
     return (
         <>
