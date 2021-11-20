@@ -16,6 +16,7 @@ const controlChange = (form, payload) => {
         updatedControl.valid = isValid;
     }
 
+
     controls[control] = updatedControl;
     const valid = Object
         .keys(controls)

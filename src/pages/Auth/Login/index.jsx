@@ -1,7 +1,10 @@
 import React from 'react';
+
 import { PrimaryButton } from 'components/ui/StyledButton';
 import { Input, FormGroup } from 'components/ui/StyledInput';
 import { StyledNavLink } from 'components/ui/StlyedLinks';
+import loginForm from './loginForm';
+import useForm from 'hooks/useForm';
 
 const links = [
     {
@@ -16,19 +19,48 @@ const links = [
     },
 ];
 
+
+const controlValid = (control) => {
+    if (!control.touched) return true;
+    return control.valid && control.validation;
+};
+
+
 const Login = (props) => {
+    const { form, changeHandler, controls } = useForm(loginForm);
+
+
     return (
         <>
             <h2>Login</h2>
-            <FormGroup>
-                <label>Email</label>
-                <Input type="email" />
-            </FormGroup>
-            <FormGroup>
-                <label>Password</label>
-                <Input type="password" />
-            </FormGroup>
-            <PrimaryButton style={{ margin: '20px 0' }} fullWidth>
+            {controls.map((c) => (
+                <FormGroup key={c.id}>
+                    {c.label && (
+                        <label className={controlValid(c) ? '' : 'invalid'}>
+                            {c.label}
+                        </label>
+                    )}
+                    <Input
+                        className={controlValid(c) ? '' : 'invalid'}
+                        id={c.id}
+                        as={c.elementType}
+                        {...c.config}
+                        value={c.value}
+                        onChange={(e) => changeHandler(e.target.value, c.id)}
+                    />
+                    {c.errors.map((e) => (
+                        <span className="error" key={e}>
+                            {e}
+                        </span>
+                    ))}
+                </FormGroup>
+            ))}
+
+            <PrimaryButton
+                disabled={!form.valid}
+                style={{ margin: '20px 0' }}
+                fullWidth
+            >
                 Login
             </PrimaryButton>
 

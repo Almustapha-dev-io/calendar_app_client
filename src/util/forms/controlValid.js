@@ -13,7 +13,7 @@ const mapValidationToValidator = {
 const validate = (func, validation, value, errs) => {
     if (validation && validation.value) {
         const result = func(value, validation.value);
-        if (result) {
+        if (!result) {
             errs.push(validation.message);
         }
 
@@ -31,7 +31,7 @@ const controlValid = control => {
     let results;
 
     const inputValue = value.trim();
-    const { required } = validation.required;
+    const { required } = validation;
 
     if (required && required.value) {
         results = inputValue ? true : false;
