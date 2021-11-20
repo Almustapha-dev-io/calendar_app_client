@@ -15,7 +15,7 @@ const dash = keyframes`
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -35;
     }
-    50% {
+    100% {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
     }

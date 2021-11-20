@@ -6,6 +6,7 @@ import { StyledNavLink } from 'components/ui/StlyedLinks';
 import loginForm from './loginForm';
 import useForm from 'hooks/useForm';
 import controlValid from 'util/helpers/controlValid';
+import Spinner from '../../../components/ui/Spinner';
 
 const links = [
     {
