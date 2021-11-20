@@ -1,4 +1,4 @@
-import { 
+import {
     maxLengthValidator,
     minLengthValidator,
     patternValidator
@@ -13,7 +13,7 @@ const mapValidationToValidator = {
 const validate = (func, validation, value, errs) => {
     if (validation && validation.value) {
         const result = func(value, validation.value);
-        if (result) { 
+        if (result) {
             errs.push(validation.message);
         }
 
@@ -23,20 +23,38 @@ const validate = (func, validation, value, errs) => {
     return true;
 };
 
-/* 
-    id
-    elementType
-    config
-        type
-        id
-        options
-    validation
-
-    touched
-    valid
-    value
-    label
-*/
 const controlValid = control => {
-    const { }
+    const { validation, value } = control;
+    const errors = [];
+
+    let isValid = true;
+    let results;
+
+    const inputValue = value.trim();
+    const { required } = validation.required;
+
+    if (required && required.value) {
+        results = inputValue ? true : false;
+        isValid = isValid && results;
+
+        if (!results) {
+            errors.push(required.message);
+            return { errors, isValid };
+        }
+    }
+
+    const validationResults = Object
+        .keys(validation)
+        .filter(key => key !== 'required')
+        .map(key => validate(
+            mapValidationToValidator[key],
+            validation[key],
+            inputValue,
+            errors
+        ));
+
+    isValid = validationResults.every(v => v);
+    return { errors, isValid };
 };
+
+export default controlValid;
