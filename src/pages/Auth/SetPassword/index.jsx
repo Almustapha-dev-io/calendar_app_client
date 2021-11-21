@@ -5,7 +5,6 @@ import { StyledLink } from 'components/ui/StlyedLinks';
 import setPasswordForm from './setPasswordForm';
 import useForm from 'hooks/useForm';
 import controlValid from 'util/helpers/controlValid';
-import useQuery from 'hooks/useQuery';
 
 const Register = (props) => {
     const { form, changeHandler, controls } = useForm(setPasswordForm);
