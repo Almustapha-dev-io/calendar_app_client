@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { PRIMARY, ORANGE } from 'util/styles/colors';
 
-export const StyledNavLink = styled(NavLink)`
+export const StyledLink = styled(Link)`
     color: ${props => props.color ? props.color : PRIMARY};
     font-size: .8rem;
     text-decoration: none;

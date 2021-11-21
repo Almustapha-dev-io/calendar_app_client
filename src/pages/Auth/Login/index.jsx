@@ -2,11 +2,10 @@ import React from 'react';
 
 import { PrimaryButton } from 'components/ui/StyledButton';
 import { Input, FormGroup } from 'components/ui/StyledInput';
-import { StyledNavLink } from 'components/ui/StlyedLinks';
+import { StyledLink } from 'components/ui/StlyedLinks';
 import loginForm from './loginForm';
 import useForm from 'hooks/useForm';
 import controlValid from 'util/helpers/controlValid';
-import Spinner from '../../../components/ui/Spinner';
 
 const links = [
     {
@@ -20,7 +19,6 @@ const links = [
         text: 'Forgot your password?',
     },
 ];
-
 
 const Login = (props) => {
     const { form, changeHandler, controls } = useForm(loginForm);
@@ -62,9 +60,9 @@ const Login = (props) => {
             {links.map((link) => (
                 <p key={link.path}>
                     {link.text}{' '}
-                    <StyledNavLink exact to={link.path}>
+                    <StyledLink exact="true" to={link.path}>
                         {link.anchorText}
-                    </StyledNavLink>
+                    </StyledLink>
                 </p>
             ))}
         </>

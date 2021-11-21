@@ -1,7 +1,7 @@
 import React from 'react';
 import { PrimaryButton } from 'components/ui/StyledButton';
 import { Input, FormGroup } from 'components/ui/StyledInput';
-import { StyledNavLink } from 'components/ui/StlyedLinks';
+import { StyledLink } from 'components/ui/StlyedLinks';
 import registerForm from './registerForm';
 import useForm from 'hooks/useForm';
 import controlValid from 'util/helpers/controlValid';
@@ -62,9 +62,9 @@ const Register = (props) => {
 
             <p>
                 Already have an account?{' '}
-                <StyledNavLink exact to="/auth/login">
+                <StyledLink exact="true" to="/auth/login">
                     Login
-                </StyledNavLink>
+                </StyledLink>
             </p>
         </>
     );

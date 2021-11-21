@@ -1,10 +1,11 @@
 import React from 'react';
 import { PrimaryButton } from 'components/ui/StyledButton';
 import { Input, FormGroup } from 'components/ui/StyledInput';
-import { StyledNavLink } from 'components/ui/StlyedLinks';
+import { StyledLink } from 'components/ui/StlyedLinks';
 import setPasswordForm from './setPasswordForm';
 import useForm from 'hooks/useForm';
 import controlValid from 'util/helpers/controlValid';
+import useQuery from 'hooks/useQuery';
 
 const Register = (props) => {
     const { form, changeHandler, controls } = useForm(setPasswordForm);
@@ -61,9 +62,9 @@ const Register = (props) => {
             </PrimaryButton>
 
             <p>
-                <StyledNavLink exact to="/auth/login">
+                <StyledLink exact="true" to="/auth/login">
                     Back to login
-                </StyledNavLink>
+                </StyledLink>
             </p>
         </>
     );
