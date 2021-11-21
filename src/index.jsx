@@ -1,15 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+
 import 'index.scss';
 import App from 'App';
 import reportWebVitals from './reportWebVitals';
 
+import { store, persistor } from './store';
+
 ReactDOM.render(
     <React.StrictMode>
-        <HashRouter>
-            <App />
-        </HashRouter>
+        <Provider store={store}>
+            <PersistGate
+                loading={<p>Initializing app</p>}
+                persistor={persistor}
+            >
+                <HashRouter>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        closeOnClick
+                        pauseOnHover
+                        draggable
+                        bodyClassName="App__Toast"
+                        hideProgressBar
+                        theme="dark"
+                    />
+                    <App />
+                </HashRouter>
+            </PersistGate>
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root')
 );

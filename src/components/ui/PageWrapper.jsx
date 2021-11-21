@@ -35,3 +35,10 @@ export const AuthContent = styled.div`
     }
 `;
 
+export const CenteredWrapper = styled(PageWrapper)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`
+

@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import setPasswordForm from './setPasswordForm';
 import { PrimaryButton } from 'components/ui/StyledButton';
 import { Input, FormGroup } from 'components/ui/StyledInput';
 import { StyledLink } from 'components/ui/StlyedLinks';
-import setPasswordForm from './setPasswordForm';
+import Spinner from 'components/ui/Spinner';
+import { AlertDanger } from 'components/ui/StyledAlerts';
+
 import useForm from 'hooks/useForm';
+import useQuery from 'hooks/useQuery';
 import controlValid from 'util/helpers/controlValid';
+import { sendPost } from 'services/auth';
 
 const Register = (props) => {
+    const query = useQuery();
+    const { push } = useHistory();
+    const [loading, setLoading] = useState(false);
     const { form, changeHandler, controls } = useForm(setPasswordForm);
+    const [errorMessage, setErrorMessage] = useState('');
+    const token = useMemo(() => query.get('token'), [query]);
 
     const passwordsMatch = () => {
         const { password, confirmPassword } = form.controls;
@@ -15,9 +28,49 @@ const Register = (props) => {
         return password.value === confirmPassword.value;
     };
 
+    const handleError = useCallback((err) => {
+        if (!err.response) {
+            toast('An unexpected errror occured!', { type: 'error' });
+            return;
+        }
+
+        const { data } = err.response;
+        setErrorMessage((_) => data.message);
+    }, []);
+
+    const submitHandler = () => {
+        if (!form.valid) return;
+
+        setLoading((_) => true);
+        const data = {
+            token,
+            password: form.controls.password.value,
+            confirmPassword: form.controls.confirmPassword.value,
+        };
+
+        sendPost(data, '/reset-password')
+            .then(() => {
+                toast('Password reset successful.', { type: 'success' });
+                push('/auth/login');
+            })
+            .catch(handleError)
+            .finally(() => setLoading((_) => false));
+    };
+
+    if (!token) {
+        return <Redirect to="/" />;
+    }
+
     return (
         <>
             <h2>Set your new password</h2>
+
+            {errorMessage && (
+                <AlertDanger style={{ marginBottom: '10px   ' }}>
+                    {errorMessage}
+                </AlertDanger>
+            )}
+
             {controls.map((c) => (
                 <FormGroup key={c.id}>
                     {c.label && (
@@ -31,6 +84,7 @@ const Register = (props) => {
                         as={c.elementType}
                         {...c.config}
                         value={c.value}
+                        disabled={loading}
                         onChange={(e) => changeHandler(e.target.value, c.id)}
                     />
                     {c.errors.map((e) => (
@@ -53,11 +107,12 @@ const Register = (props) => {
             )}
 
             <PrimaryButton
-                disabled={!form.valid || !passwordsMatch()}
+                onClick={submitHandler}
+                disabled={!form.valid || !passwordsMatch() || loading}
                 style={{ margin: '20px 0' }}
                 fullWidth
             >
-                Save
+                {loading ? <Spinner /> : 'Save'}
             </PrimaryButton>
 
             <p>
