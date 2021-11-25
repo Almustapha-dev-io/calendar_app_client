@@ -28,20 +28,19 @@ const CalendarDayGridItem = ({ day, select }) => {
 
     let headerText = [day.dayOfMonth];
     if (!isBigScreen) {
-        headerText = [
-            getDayString(day.dateString),
-            getDayDo(day.dateString)
-        ];
+        headerText = [getDayString(day.dateString), getDayDo(day.dateString)];
     }
 
+    let addButton = null;
+    if (dayjs(day.dateString).valueOf() > Date.now() && day.isCurrentMonth) {
+        addButton = <AddSvg clicked={select} />;
+    }
     return (
         <>
             <CalendarGridItem className={gridItemClasses.join(' ')}>
                 <CalendayGridItemHeader>
                     {headerText.join(' ')}
-                    {dayjs(day.dateString).valueOf() > Date.now() && (
-                        <AddSvg clicked={select} />
-                    )}
+                    {addButton}
                 </CalendayGridItemHeader>
 
                 <CalendarGridItemContent>
@@ -56,7 +55,7 @@ const CalendarDayGridItem = ({ day, select }) => {
 
 CalendarDayGridItem.propTypes = {
     day: PropTypes.object.isRequired,
-    select: PropTypes.func.isRequired
+    select: PropTypes.func.isRequired,
 };
 
 export default CalendarDayGridItem;

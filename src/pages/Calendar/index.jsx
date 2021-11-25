@@ -6,7 +6,7 @@ import CalendarGrid from 'components/Calendar/CalendarGrid';
 import Loader from 'components/ui/Loader';
 import { getAppointmentsForMonth } from 'services/appointments';
 import showToast from 'util/helpers/showToast';
-import { setEvents } from '../../store/actions';
+import { setEvents } from 'store/actions';
 
 const Calendar = () => {
     const dispatch = useDispatch();

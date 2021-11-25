@@ -12,7 +12,8 @@ const setEvents = (state, payload) => {
 
 const addEvent = (state, payload) => {
     const { date, event } = payload;
-    const updatedEvents = [...state[date], event];
+    const events = state[date] ? state[date] : [];
+    const updatedEvents = [...events, event];
     return {
         ...state,
         [date]: updatedEvents

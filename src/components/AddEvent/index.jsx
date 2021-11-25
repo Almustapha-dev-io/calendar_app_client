@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import formState from './addeventForm';
@@ -9,11 +9,22 @@ import useForm from 'hooks/useForm';
 import { postAppointment } from 'services/appointments';
 import controlValid from 'util/helpers/controlValid';
 import showToast from 'util/helpers/showToast';
+import { addEvent } from 'store/actions';
 
 const AddEvent = (props) => {
+    const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
+    const calendarState = useSelector((state) => state.calendar);
     const { form, changeHandler, controls, resetForm } = useForm(formState);
     const [state, setState] = useState({ loading: false });
+
+    const addEventToStore = useCallback(
+        (data) => {
+            const { month, year } = calendarState;
+            dispatch(addEvent({ data, month, year }));
+        },
+        [calendarState, dispatch]
+    );
 
     useEffect(() => {
         if (!props.date) {
@@ -27,12 +38,12 @@ const AddEvent = (props) => {
             const { data } = err.response;
             errMessage = data.message;
         }
-        
+
         showToast(errMessage, 'error');
         setState((state) => ({ ...state, loading: false }));
     }, []);
 
-    const addEvent = () => {
+    const saveEvent = () => {
         const data = {
             title: form.controls.title.value,
             details: form.controls.details.value,
@@ -42,6 +53,7 @@ const AddEvent = (props) => {
         postAppointment(data, token)
             .then((res) => {
                 setState((state) => ({ ...state, loading: false }));
+                addEventToStore(res.data.data);
                 showToast('Event added', 'success');
                 props.close();
             })
@@ -55,7 +67,7 @@ const AddEvent = (props) => {
         if (props.event) {
             // updateEvent();
         } else {
-            addEvent();
+            saveEvent();
         }
     };
 
