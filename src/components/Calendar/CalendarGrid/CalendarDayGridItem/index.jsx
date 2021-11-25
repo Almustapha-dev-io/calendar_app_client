@@ -44,9 +44,14 @@ const CalendarDayGridItem = ({ day, select }) => {
                 </CalendayGridItemHeader>
 
                 <CalendarGridItemContent>
-                    {/* <div className={`item ${gridItemClasses.join(' ')}`}>
-                        help me
-                    </div> */}
+                    {day.events && day.events.slice(0, 3).map((event) => (
+                        <div
+                            key={event._id}
+                            className={`item ${gridItemClasses.join(' ')}`}
+                        >
+                            {event.title}
+                        </div>
+                    ))}
                 </CalendarGridItemContent>
             </CalendarGridItem>
         </>

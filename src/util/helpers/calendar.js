@@ -50,7 +50,8 @@ export const createDaysForCurrentMonth = (year, month) => {
             return {
                 dateString: dayjs(`${year}-${month}-${index + 1}`).format('YYYY-MM-DD'),
                 dayOfMonth: index + 1,
-                isCurrentMonth: true
+                isCurrentMonth: true,
+                events: []
             };
         });
 };
@@ -77,7 +78,8 @@ export const createDaysForPreviousMonth = (year, month, currentMonthDays) => {
                 ).format('YYYY-MM-DD'),
                 dayOfMonth: previousMonthLastMondayDayOfMonth + index,
                 isCurrentMonth: false,
-                isPreviousMonth: true
+                isPreviousMonth: true,
+                events: []
             };
         });
     
@@ -98,7 +100,8 @@ export const createDaysForNextMonth = (year, month, currentMonthDays) => {
             ).format('YYYY-MM-DD'),
             dayOfMonth: index + 1,
             isCurrentMonth: false,
-            isNextMonth: true
+            isNextMonth: true,
+            events: []
         };
     });
 };

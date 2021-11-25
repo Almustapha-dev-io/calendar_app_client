@@ -104,7 +104,7 @@ export const CalendarGridItem = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 
     &.not-current {
         background: #f5f5f5;
@@ -172,34 +172,34 @@ export const CalendayGridItemHeader = styled.div`
 
 export const CalendarGridItemContent = styled.div`
     width: 100%;
-    height: 100%;
+    // height: 100%;
     margin: 0;
-    padding: .2rem .5rem;
+    padding: .2rem 1rem;
     box-sizing: border-box;
     
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: .5rem;
+    grid-gap: 1rem;
     transition: all .2s;
 
     .item {
-        // width: 90%;
         max-height: 1.5rem;
         font-size: .8rem;
         font-weight: 500;
         padding: 0.1rem .3rem;
         box-sizing: border-box;
-        border-radius: 5px;
+        border-radius: 3px;
         
-        border: 1px solid ${PRIMARY};
-        color: ${PRIMARY};
+        border: none;
+        color: #fff;
+        background: ${SUCCESS};
 
         cursor: pointer;
     }
     
     .item.today {
-        color: #fff;
-        border-color: #fff;
+        color: ${PRIMARY};
+        background: #fff;
     }
 
     .item.not-current {
@@ -213,6 +213,8 @@ export const CalendarGridItemContent = styled.div`
 
     @media (min-width: 1000px) {
         grid-template-columns: repeat(1, 1fr);
+        grid-gap: .5rem;
+        padding: .2rem .5rem;
     }
 `;
 
