@@ -52,15 +52,11 @@ export const ModalContainer = styled.div`
     &.enter-done {
         opacity: 1;
         pointer-events: visible;
-
-        .content {
-            transform: scale(1) translateY(0);
-        }
+        .content { transform: scale(1) translateY(0); }
     }
 
     &.exit {
         opacity: 0;
-
         .content {
             transform: scale(1) translateY(0);
             transform: scale(.5) translateY(30px);
@@ -71,10 +67,7 @@ export const ModalContainer = styled.div`
     @media (min-width: 500px) {
         .content {
             width: 500px;
-
-            .actions {
-                justify-content: flex-end;
-            }
+            .actions { justify-content: flex-end; }
         }      
     }
 `;

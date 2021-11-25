@@ -9,7 +9,6 @@ import {
     PrimaryButton,
     SecondaryButton,
 } from 'components/ui/StyledButton';
-import { PRIMARY } from 'util/styles/colors';
 
 const Modal = (props) => {
     const proceedText = props.proceedText ? props.proceedText : 'Continue';

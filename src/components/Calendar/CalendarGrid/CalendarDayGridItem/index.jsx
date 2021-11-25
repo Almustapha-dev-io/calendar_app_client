@@ -14,7 +14,7 @@ import useMediaQuery from 'hooks/useMediaQuery';
 
 const today = dayjs().format('YYYY-MM-DD');
 
-const CalendarDayGridItem = ({ day, select }) => {
+const CalendarDayGridItem = ({ day, onAdd, eventClicked }) => {
     const isBigScreen = useMediaQuery('(min-width: 1000px)');
 
     const gridItemClasses = [];
@@ -33,7 +33,7 @@ const CalendarDayGridItem = ({ day, select }) => {
 
     let addButton = null;
     if (dayjs(day.dateString).valueOf() > Date.now() && day.isCurrentMonth) {
-        addButton = <AddSvg clicked={select} />;
+        addButton = <AddSvg clicked={onAdd} />;
     }
     return (
         <>
@@ -48,6 +48,7 @@ const CalendarDayGridItem = ({ day, select }) => {
                         <div
                             key={event._id}
                             className={`item ${gridItemClasses.join(' ')}`}
+                            onClick={() => eventClicked(event)}
                         >
                             {event.title}
                         </div>
@@ -60,7 +61,8 @@ const CalendarDayGridItem = ({ day, select }) => {
 
 CalendarDayGridItem.propTypes = {
     day: PropTypes.object.isRequired,
-    select: PropTypes.func.isRequired,
+    onAdd: PropTypes.func.isRequired,
+    eventClicked: PropTypes.func.isRequired
 };
 
 export default CalendarDayGridItem;

@@ -7,6 +7,8 @@ import CalendarDayGridItem from './CalendarDayGridItem';
 
 import { CalendarGridContainer } from 'components/ui/Calendar';
 import AddEvent from 'components/AddEvent';
+import SidePanel from 'components/SidePanel';
+
 import {
     createDaysForCurrentMonth,
     createDaysForNextMonth,
@@ -15,15 +17,16 @@ import {
 import useMediaQuery from 'hooks/useMediaQuery';
 
 const CalendarGrid = () => {
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [calendarGridDays, setCalendarGridDays] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+
+    const isBigScreen = useMediaQuery('(min-width: 1000px)');
     const calendarState = useSelector((state) => state.calendar);
     const currentMonthEvents = useSelector((state) => {
         const { month, year } = calendarState;
         return state.events[`${year}-${month}`] ?? [];
     });
-
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [calendarGridDays, setCalendarGridDays] = useState([]);
-    const isBigScreen = useMediaQuery('(min-width: 1000px)');
 
     useEffect(() => {
         const currentMonthDays = createDaysForCurrentMonth(
@@ -46,7 +49,7 @@ const CalendarGrid = () => {
             ...currentMonthDays,
             ...nextMonthDays,
         ];
-        
+
         currentMonthEvents.forEach((event) => {
             const formattedDate = dayjs(event.appointmentDate).format(
                 'YYYY-MM-DD'
@@ -70,13 +73,23 @@ const CalendarGrid = () => {
                 date={selectedDate}
                 close={() => setSelectedDate((_) => null)}
             />
+
+            <SidePanel
+                close={() => setSelectedEvent((_) => null)}
+                title="Test"
+                show={selectedEvent ? true : false}
+            >
+                <pre>{JSON.stringify(selectedEvent, null, 2)}</pre>
+            </SidePanel>
+
             <CalendarGridContainer>
                 {isBigScreen && <CalendarDaysHeader />}
                 {calendarGridDays.map((day) => (
                     <CalendarDayGridItem
                         day={day}
                         key={day.dateString}
-                        select={() => setSelectedDate((_) => day)}
+                        onAdd={() => setSelectedDate((_) => day)}
+                        eventClicked={(event) => setSelectedEvent((_) => event)}
                     />
                 ))}
             </CalendarGridContainer>

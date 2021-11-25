@@ -55,8 +55,10 @@ const Calendar = () => {
         return <Loader />;
     }
 
+    
+    
     return (
-        <>
+        <>  
             <CalendarControls />
             <CalendarGrid />
         </>

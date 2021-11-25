@@ -195,6 +195,7 @@ export const CalendarGridItemContent = styled.div`
         background: ${SUCCESS};
 
         cursor: pointer;
+        transition: all .2s;
     }
     
     .item.today {
@@ -208,7 +209,7 @@ export const CalendarGridItemContent = styled.div`
     }
 
     .item:hover {
-        border-width: 2px;
+        border: 2px solid ${PRIMARY};
     }
 
     @media (min-width: 1000px) {
