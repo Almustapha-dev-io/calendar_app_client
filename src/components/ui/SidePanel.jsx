@@ -9,7 +9,7 @@ export const SliderContainer = styled.div`
     bottom: 0;
     background-color: rgba(0, 0, 0, .8);
     opacity: 0;
-    z-index: 999999;
+    z-index: 999;
     pointer-events: none;
     overflow: hidden;
     padding: 0;
@@ -22,7 +22,7 @@ export const SliderContainer = styled.div`
         background-color: #fff;
         margin: 0;
         transition: all .2s ease;
-
+        
         * { box-sizing: border-box; }
 
         .header {
