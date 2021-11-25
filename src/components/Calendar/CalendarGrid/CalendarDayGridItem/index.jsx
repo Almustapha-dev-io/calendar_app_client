@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 
@@ -8,16 +8,14 @@ import {
     CalendarGridItemContent,
 } from 'components/ui/Calendar';
 import AddSvg from 'components/svg/AddSvg';
-import AddEvent from 'components/AddEvent';
 
 import { getDayDo, getDayString } from 'util/helpers/calendar';
 import useMediaQuery from 'hooks/useMediaQuery';
 
 const today = dayjs().format('YYYY-MM-DD');
 
-const CalendarDayGridItem = ({ day }) => {
+const CalendarDayGridItem = ({ day, select }) => {
     const isBigScreen = useMediaQuery('(min-width: 1000px)');
-    const [selectedDate, setSelectedDate] = useState(null);
 
     const gridItemClasses = [];
     if (!day.isCurrentMonth) {
@@ -38,15 +36,11 @@ const CalendarDayGridItem = ({ day }) => {
 
     return (
         <>
-            <AddEvent
-                date={selectedDate}
-                close={() => setSelectedDate((_) => null)}
-            />
             <CalendarGridItem className={gridItemClasses.join(' ')}>
                 <CalendayGridItemHeader>
                     {headerText.join(' ')}
                     {dayjs(day.dateString).valueOf() > Date.now() && (
-                        <AddSvg clicked={() => setSelectedDate((_) => day)} />
+                        <AddSvg clicked={select} />
                     )}
                 </CalendayGridItemHeader>
 
@@ -62,6 +56,7 @@ const CalendarDayGridItem = ({ day }) => {
 
 CalendarDayGridItem.propTypes = {
     day: PropTypes.object.isRequired,
+    select: PropTypes.func.isRequired
 };
 
 export default CalendarDayGridItem;

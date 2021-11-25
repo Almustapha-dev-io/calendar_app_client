@@ -5,6 +5,7 @@ import CalendarDaysHeader from './CalendarDaysHeader';
 import CalendarDayGridItem from './CalendarDayGridItem';
 
 import { CalendarGridContainer } from 'components/ui/Calendar';
+import AddEvent from 'components/AddEvent';
 import {
     createDaysForCurrentMonth,
     createDaysForNextMonth,
@@ -14,6 +15,7 @@ import useMediaQuery from 'hooks/useMediaQuery';
 
 const CalendarGrid = () => {
     const state = useSelector((state) => state.calendar);
+    const [selectedDate, setSelectedDate] = useState(null);
     const [calendarGridDays, setCalendarGridDays] = useState([]);
     const isBigScreen = useMediaQuery('(min-width: 1000px)');
 
@@ -40,12 +42,22 @@ const CalendarGrid = () => {
     }, [state]);
 
     return (
-        <CalendarGridContainer>
-            {isBigScreen && <CalendarDaysHeader />}
-            {calendarGridDays.map((day) => (
-                <CalendarDayGridItem day={day} key={day.dateString} />
-            ))}
-        </CalendarGridContainer>
+        <>
+            <AddEvent
+                date={selectedDate}
+                close={() => setSelectedDate((_) => null)}
+            />
+            <CalendarGridContainer>
+                {isBigScreen && <CalendarDaysHeader />}
+                {calendarGridDays.map((day) => (
+                    <CalendarDayGridItem
+                        day={day}
+                        key={day.dateString}
+                        select={() => setSelectedDate((_) => day)}
+                    />
+                ))}
+            </CalendarGridContainer>
+        </>
     );
 };
 
