@@ -17,8 +17,8 @@ const LoaderElement = styled.div`
     &,
     &:after {
         border-radius: 50%;
-        width: 10em;
-        height: 10em;
+        width: 6em;
+        height: 6em;
     }
 
     margin: 60px auto;

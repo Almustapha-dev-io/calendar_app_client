@@ -1,27 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import formState from './addeventForm';
 import Modal from 'components/Modal';
 import { Input, FormGroup } from 'components/ui/StyledInput';
-import controlValid from 'util/helpers/controlValid';
 import useForm from 'hooks/useForm';
 import { postAppointment } from 'services/appointments';
-
-const showToast = (msg, type) => toast(msg, {
-    type,
-    position: 'top-right'
-});
+import controlValid from 'util/helpers/controlValid';
+import showToast from 'util/helpers/showToast';
 
 const AddEvent = (props) => {
     const token = useSelector((state) => state.auth.token);
     const { form, changeHandler, controls, resetForm } = useForm(formState);
-    const [state, setState] = useState({
-        loading: false,
-        errorMessage: '',
-    });
+    const [state, setState] = useState({ loading: false });
 
     useEffect(() => {
         if (!props.date) {
@@ -30,18 +22,14 @@ const AddEvent = (props) => {
     }, [props.date, resetForm]);
 
     const handleError = useCallback((err) => {
-        if (!err.response) {
-            showToast('An unexpected error occured!', 'error');
-            setState((state) => ({ ...state, loading: false }));
-            return;
+        let errMessage = 'An unexpected error occured!';
+        if (err.response) {
+            const { data } = err.response;
+            errMessage = data.message;
         }
-
-        const { data } = err.response;
-        setState((state) => ({
-            ...state,
-            loading: false,
-            errorMessage: data.message,
-        }));
+        
+        showToast(errMessage, 'error');
+        setState((state) => ({ ...state, loading: false }));
     }, []);
 
     const addEvent = () => {

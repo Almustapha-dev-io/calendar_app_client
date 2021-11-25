@@ -10,3 +10,10 @@ export {
     setYear,
     resetCalendar
 } from './calendar';
+
+
+export {
+    addEvent,
+    setEvents,
+    resetEvent
+} from './events';
