@@ -34,8 +34,7 @@ body {
     padding: 0;
     overflow: auto;
     scrollbar-width: thin;
-    scrollbar-color: transparent;
-    scrollbar-track-color: transparent;
+    scrollbar-color: #6D6E71 transparent;
     
     &::-webkit-scrollbar { 
         width: 5px;
@@ -58,7 +57,7 @@ body {
 }
 
 .custom-scroll:hover {
-    &::-webkit-scrollbar-thumb { background: rgba(204, 204, 204, .3); }
+    &::-webkit-scrollbar-thumb { background: #6D6E71; }
 }
 
 code {

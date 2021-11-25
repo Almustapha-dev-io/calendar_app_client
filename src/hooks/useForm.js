@@ -19,10 +19,10 @@ const useForm = initialState => {
         });
     }, []);
 
-    const resetForm = () => dispatch({
+    const resetForm = useCallback(() => dispatch({
         type: 'RESET',
         payload: initialState
-    });
+    }), [initialState]);
 
     const controls = Object
         .keys(form.controls)

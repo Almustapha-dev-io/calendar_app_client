@@ -28,8 +28,10 @@ const links = [
 
 const RecoverPassword = (props) => {
     const { push } = useHistory();
-    const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [state, setState] = useState({
+        loading: false,
+        errorMessage: '',
+    });
     const { form, changeHandler, controls } = useForm(recoveryForm);
 
     const handleError = useCallback((err) => {
@@ -39,7 +41,11 @@ const RecoverPassword = (props) => {
         }
 
         const { data } = err.response;
-        setErrorMessage((_) => data.message);
+        setState((state) => ({
+            ...state,
+            loading: false,
+            errorMessage: data.message,
+        }));
     }, []);
 
     const control = controls[0];
@@ -47,20 +53,22 @@ const RecoverPassword = (props) => {
     const submitHandler = () => {
         if (!form.valid) return;
 
-        setLoading((_) => true);
+        setState((state) => ({ ...state, loading: true }));
         const email = control.value;
         sendPost({ email }, '/recover-password')
-            .then(() => push('/auth/confirm'))
-            .catch(handleError)
-            .finally(() => setLoading((_) => false));
+            .then(() => {
+                setState((state) => ({ ...state, loading: false }));
+                push('/auth/confirm');
+            })
+            .catch(handleError);
     };
 
     return (
         <>
             <h2>Password Recovery</h2>
-            {errorMessage && (
+            {state.errorMessage && (
                 <AlertDanger style={{ marginBottom: '10px   ' }}>
-                    {errorMessage}
+                    {state.errorMessage}
                 </AlertDanger>
             )}
 
@@ -76,7 +84,7 @@ const RecoverPassword = (props) => {
                     as={control.elementType}
                     {...control.config}
                     value={control.value}
-                    disabled={loading}
+                    disabled={state.loading}
                     onChange={(e) => changeHandler(e.target.value, control.id)}
                 />
                 {control.errors.map((e) => (
@@ -88,11 +96,11 @@ const RecoverPassword = (props) => {
 
             <PrimaryButton
                 onClick={submitHandler}
-                disabled={!form.valid || loading}
+                disabled={!form.valid || state.loading}
                 style={{ margin: '20px 0' }}
                 fullWidth
             >
-                {loading ? <Spinner /> : 'Recover'}
+                {state.loading ? <Spinner /> : 'Recover'}
             </PrimaryButton>
 
             {links.map((link) => (

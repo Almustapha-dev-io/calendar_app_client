@@ -1,9 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { CenteredWrapper } from '../../components/ui/PageWrapper';
-import { PrimaryButton } from '../../components/ui/StyledButton';
 
-import notFoundSvg from '../../assets/svg/notFound.svg';
+import { CenteredWrapper } from 'components/ui/PageWrapper';
+import { PrimaryButton } from 'components/ui/StyledButton';
+import notFoundSvg from 'assets/svg/notFound.svg';
 
 const PageNotFound = () => {
     const { goBack } = useHistory();

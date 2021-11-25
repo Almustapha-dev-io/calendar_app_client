@@ -34,26 +34,19 @@ const Svg = styled.svg`
     }
 `;
 
-
-const Spinner = props => {
+const Spinner = (props) => {
     const { strokeColor } = props;
     const stroke = strokeColor ? strokeColor : '#fff';
 
     return (
         <Svg viewBox="0 0 50 50">
-            <circle
-                stroke={stroke}
-                cx="25"
-                cy="25"
-                r="20"
-            >
-            </circle>
+            <circle stroke={stroke} cx="25" cy="25" r="20"></circle>
         </Svg>
     );
 };
 
 Spinner.propTypes = {
-    strokeColor: PropTypes.string
+    strokeColor: PropTypes.string,
 };
 
 export default Spinner;

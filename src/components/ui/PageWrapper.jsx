@@ -40,5 +40,32 @@ export const CenteredWrapper = styled(PageWrapper)`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-`
+`;
 
+
+export const MainWrapper = styled(PageWrapper)`
+    max-height: 100vh;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const MainContent = styled.div`
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem .5rem;
+    box-sizing: border-box;
+    overflow: auto;
+    display: block;
+`;
+
+export const CenterInParent = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;

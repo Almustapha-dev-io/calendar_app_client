@@ -5,13 +5,16 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Auth from 'pages/Auth';
 import Logout from 'pages/Logout';
 import PageNotFound from 'pages/PageNotFound';
+import Loader from 'components/ui/Loader';
 
+const Main = React.lazy(() => import('pages/Main'));
 const App = () => {
     const isAuth = useSelector((state) =>
         state.auth.token && state.auth.userInfo ? true : false
     );
 
     const routes = [
+        { path: '/app', component: Main, lazy: true },
         { path: '/logout', component: Logout, lazy: false },
         { path: '/page-not-found', component: PageNotFound, lazy: false },
     ];
@@ -28,7 +31,7 @@ const App = () => {
                     path={route.path}
                     render={(props) =>
                         route.lazy ? (
-                            <Suspense fallback={<p>Loading</p>}>
+                            <Suspense fallback={<Loader />}>
                                 <route.component {...props} />
                             </Suspense>
                         ) : (

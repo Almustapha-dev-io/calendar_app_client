@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { PRIMARY } from 'util/styles/colors';
 
 const ButtonBase = styled.button`
     min-height: 2.8rem;
-    min-width: ${props => props.fullWidth ? '100%' : '6.25rem'};
+    min-width: ${(props) => (props.fullWidth ? '100%' : '6.25rem')};
     padding: 0;
     margin: 0;
     display: flex;
@@ -11,12 +12,12 @@ const ButtonBase = styled.button`
     justify-content: center;
     font-family: inherit;
     font-weight: 600;
-    font-size: .9rem;
+    font-size: 0.9rem;
     letter-spacing: 1px;
     border-radius: 5px;
     border: none;
     outline: none;
-    transition: all .3s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
     outline-offset: 1px;
 
@@ -31,6 +32,9 @@ const ButtonBase = styled.button`
     }
 `;
 
+ButtonBase.propTypes = {
+    fullWidth: PropTypes.bool,
+};
 
 export const PrimaryButton = styled(ButtonBase)`
     background: ${PRIMARY};
@@ -45,7 +49,6 @@ export const PrimaryButton = styled(ButtonBase)`
     }
 `;
 
-
 export const SecondaryButton = styled(ButtonBase)`
     background: #fff;
     color: ${PRIMARY};
@@ -55,4 +58,3 @@ export const SecondaryButton = styled(ButtonBase)`
         outline: 3px solid ${PRIMARY};
     }
 `;
-

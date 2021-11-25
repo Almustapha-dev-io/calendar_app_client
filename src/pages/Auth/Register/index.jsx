@@ -15,8 +15,10 @@ import { sendPost } from 'services/auth';
 const Register = (props) => {
     const { push } = useHistory();
     const { form, changeHandler, controls } = useForm(registerForm);
-    const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [state, setState] = useState({
+        loading: false,
+        errorMessage: '',
+    });
 
     const passwordsMatch = () => {
         const { password, confirmPassword } = form.controls;
@@ -31,13 +33,17 @@ const Register = (props) => {
         }
 
         const { data } = err.response;
-        setErrorMessage((_) => data.message);
+        setState((state) => ({
+            ...state,
+            loading: false,
+            errorMessage: data.message,
+        }));
     }, []);
 
     const registerHandler = () => {
         if (!form.valid) return;
 
-        setLoading((_) => true);
+        setState((state) => ({ ...state, loading: true }));
         const data = {
             email: form.controls.email.value,
             firstName: form.controls.firstName.value,
@@ -46,18 +52,20 @@ const Register = (props) => {
         };
 
         sendPost(data, '/signup')
-            .then(() => push('/auth/confirm'))
-            .catch(handleError)
-            .finally(() => setLoading((_) => false));
+            .then(() => {
+                setState((state) => ({ ...state, loading: false }));
+                push('/auth/confirm');
+            })
+            .catch(handleError);
     };
 
     return (
         <>
             <h2>Create an account</h2>
 
-            {errorMessage && (
+            {state.errorMessage && (
                 <AlertDanger style={{ marginBottom: '10px   ' }}>
-                    {errorMessage}
+                    {state.errorMessage}
                 </AlertDanger>
             )}
 
@@ -74,7 +82,7 @@ const Register = (props) => {
                         as={c.elementType}
                         {...c.config}
                         value={c.value}
-                        disabled={loading}
+                        disabled={state.loading}
                         onChange={(e) => changeHandler(e.target.value, c.id)}
                     />
                     {c.errors.map((e) => (
@@ -98,11 +106,11 @@ const Register = (props) => {
 
             <PrimaryButton
                 onClick={registerHandler}
-                disabled={!form.valid || !passwordsMatch() || loading}
+                disabled={!form.valid || !passwordsMatch() || state.loading}
                 style={{ margin: '20px 0' }}
                 fullWidth
             >
-                {loading ? <Spinner /> : 'Sign up'}
+                {state.loading ? <Spinner /> : 'Sign up'}
             </PrimaryButton>
 
             <p>

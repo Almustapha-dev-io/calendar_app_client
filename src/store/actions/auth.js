@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import { resetCalendar } from '.';
 
 export const authSuccess = payload => {
     return {
@@ -7,6 +8,12 @@ export const authSuccess = payload => {
     };
 };
 
+const doLogout = () => ({ type: actionTypes.LOGOUT });
+
 export const logout = () => {
-    return { type: actionTypes.LOGOUT };
+    return dispatch => {
+        dispatch(doLogout());
+        dispatch(resetCalendar());
+    }
 };
+

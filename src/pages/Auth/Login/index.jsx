@@ -27,64 +27,78 @@ const links = [
     },
 ];
 
-const Login = (props) => {
+const Login = () => {
     const query = useQuery();
     const { form, changeHandler, controls } = useForm(loginForm);
-    const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [verificationMsg, setVerificationMsg] = useState('');
+    const [state, setState] = useState({
+        loading: false,
+        errorMessage: '',
+        verificationMsg: '',
+    });
     const dispatch = useDispatch();
 
     const handleError = useCallback((err) => {
         if (!err.response) {
             toast('An unexpected errror occured!', { type: 'error' });
+            setState((state) => ({ ...state, loading: false }));
             return;
         }
 
         const { data } = err.response;
-        setErrorMessage((_) => data.message);
+        setState((state) => ({
+            ...state,
+            loading: false,
+            errorMessage: data.message,
+        }));
     }, []);
 
     useEffect(() => {
         const token = query.get('token');
         if (token) {
-            setLoading((_) => true);
+            setState((state) => ({ ...state, loading: true }));
+
             sendPost({ token }, '/verify')
                 .then(() =>
-                    setVerificationMsg(
-                        (_) => 'Your account has been confirmed! Please login'
-                    )
+                    setState((state) => ({
+                        ...state,
+                        loading: false,
+                        verificationMsg:
+                            'Your account has been confirmed! Please login',
+                    }))
                 )
-                .catch(handleError)
-                .finally(() => setLoading((_) => false));
+                .catch(handleError);
         }
     }, [handleError, query]);
 
     const loginHandler = () => {
         if (!form.valid) return;
 
-        setLoading((_) => true);
+        setState((state) => ({ ...state, loading: true }));
         const data = {
             email: form.controls.email.value,
             password: form.controls.password.value,
         };
         sendPost(data)
-            .then((res) => dispatch(authSuccess(res.data.data)))
-            .catch(handleError)
-            .finally(() => setLoading((_) => false));
+            .then((res) => {
+                setState((state) => ({ ...state, loading: false }));
+                dispatch(authSuccess(res.data.data));
+            })
+            .catch(handleError);
     };
 
     return (
         <>
             <h2>Login</h2>
-            {errorMessage && (
+
+            {state.errorMessage && (
                 <AlertDanger style={{ marginBottom: '10px   ' }}>
-                    {errorMessage}
+                    {state.errorMessage}
                 </AlertDanger>
             )}
-            {verificationMsg && (
+
+            {state.verificationMsg && (
                 <AlertSuccess style={{ marginBottom: '10px   ' }}>
-                    {verificationMsg}
+                    {state.verificationMsg}
                 </AlertSuccess>
             )}
 
@@ -95,15 +109,17 @@ const Login = (props) => {
                             {c.label}
                         </label>
                     )}
+
                     <Input
                         className={controlValid(c) ? '' : 'invalid'}
                         id={c.id}
                         as={c.elementType}
                         {...c.config}
-                        disabled={loading}
+                        disabled={state.loading}
                         value={c.value}
                         onChange={(e) => changeHandler(e.target.value, c.id)}
                     />
+
                     {c.errors.map((e) => (
                         <span className="error" key={e}>
                             {e}
@@ -114,11 +130,11 @@ const Login = (props) => {
 
             <PrimaryButton
                 onClick={loginHandler}
-                disabled={!form.valid || loading}
+                disabled={!form.valid || state.loading}
                 style={{ margin: '20px 0' }}
                 fullWidth
             >
-                {loading ? <Spinner /> : 'Login'}
+                {state.loading ? <Spinner /> : 'Login'}
             </PrimaryButton>
 
             {links.map((link) => (

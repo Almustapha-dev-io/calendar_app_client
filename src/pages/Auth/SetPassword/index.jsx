@@ -17,10 +17,12 @@ import { sendPost } from 'services/auth';
 const Register = (props) => {
     const query = useQuery();
     const { push } = useHistory();
-    const [loading, setLoading] = useState(false);
-    const { form, changeHandler, controls } = useForm(setPasswordForm);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [state, setState] = useState({
+        loading: false,
+        errorMessage: '',
+    });
     const token = useMemo(() => query.get('token'), [query]);
+    const { form, changeHandler, controls } = useForm(setPasswordForm);
 
     const passwordsMatch = () => {
         const { password, confirmPassword } = form.controls;
@@ -35,13 +37,17 @@ const Register = (props) => {
         }
 
         const { data } = err.response;
-        setErrorMessage((_) => data.message);
+        setState((state) => ({
+            ...state,
+            loading: false,
+            errorMessage: data.message,
+        }));
     }, []);
 
     const submitHandler = () => {
         if (!form.valid) return;
 
-        setLoading((_) => true);
+        setState((state) => ({ ...state, loading: true }));
         const data = {
             token,
             password: form.controls.password.value,
@@ -53,8 +59,7 @@ const Register = (props) => {
                 toast('Password reset successful.', { type: 'success' });
                 push('/auth/login');
             })
-            .catch(handleError)
-            .finally(() => setLoading((_) => false));
+            .catch(handleError);
     };
 
     if (!token) {
@@ -65,9 +70,9 @@ const Register = (props) => {
         <>
             <h2>Set your new password</h2>
 
-            {errorMessage && (
+            {state.errorMessage && (
                 <AlertDanger style={{ marginBottom: '10px   ' }}>
-                    {errorMessage}
+                    {state.errorMessage}
                 </AlertDanger>
             )}
 
@@ -84,7 +89,7 @@ const Register = (props) => {
                         as={c.elementType}
                         {...c.config}
                         value={c.value}
-                        disabled={loading}
+                        disabled={state.loading}
                         onChange={(e) => changeHandler(e.target.value, c.id)}
                     />
                     {c.errors.map((e) => (
@@ -108,11 +113,11 @@ const Register = (props) => {
 
             <PrimaryButton
                 onClick={submitHandler}
-                disabled={!form.valid || !passwordsMatch() || loading}
+                disabled={!form.valid || !passwordsMatch() || state.loading}
                 style={{ margin: '20px 0' }}
                 fullWidth
             >
-                {loading ? <Spinner /> : 'Save'}
+                {state.loading ? <Spinner /> : 'Save'}
             </PrimaryButton>
 
             <p>

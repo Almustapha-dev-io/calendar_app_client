@@ -17,7 +17,8 @@ const logger = store => {
     };
 };
 
-const composeEnhancer = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
+let composeEnhancer = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null;
+if (!composeEnhancer) composeEnhancer = compose;
 
 const persistConfig = {
     key: 'root',

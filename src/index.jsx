@@ -20,7 +20,7 @@ ReactDOM.render(
             >
                 <HashRouter>
                     <ToastContainer
-                        position="top-right"
+                        position="bottom-center"
                         autoClose={5000}
                         closeOnClick
                         pauseOnHover

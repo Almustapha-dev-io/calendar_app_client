@@ -9,11 +9,18 @@ const EmailConfirm = (props) => {
     return (
         <>
             <h2>Email confirmation</h2>
-            <img src={mailbox} alt="mailbox-animate"  style={{ maxHeight: '300px' }}/>
-            <p style={{lineHeight: '1rem', textAlign: 'center'}}>
-                We just sent a verification mail to your email address. If you don't
-                get a mail from us, please retry.
+
+            <img
+                src={mailbox}
+                alt="mailbox-animate"
+                style={{ maxHeight: '300px' }}
+            />
+
+            <p style={{ lineHeight: '1rem', textAlign: 'center' }}>
+                We just sent a verification mail to your email address. If you
+                don't get a mail from us, please retry.
             </p>
+
             <SecondaryButton
                 onClick={() => push('/auth/login')}
                 style={{ margin: '20px 0' }}
