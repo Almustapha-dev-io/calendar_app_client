@@ -18,4 +18,10 @@ export const postAppointment = (data, token) => {
     });
 };
 
-// export const deleteAppointmen
+export const deleteAppointment = (id, token) => {
+    return axios.delete(`${BASE_URL}/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
