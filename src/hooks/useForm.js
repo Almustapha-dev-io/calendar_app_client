@@ -1,6 +1,6 @@
 import { useReducer, useCallback } from 'react';
 import controlChange from 'util/forms/controlChange';
-import setInitialValue from '../util/forms/setInitialValue';
+import setInitialValue from 'util/forms/setInitialValue';
 
 const reducer = (state, action) => {
     switch (action.type) {

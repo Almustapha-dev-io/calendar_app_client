@@ -37,13 +37,16 @@ const ViewEvent = () => {
 
     const deleteEvent = () => {
         setState((_) => ({ ...state, loading: true, showAlert: false }));
-
         const id = event._id;
         deleteAppointment(id, token)
             .then((res) => {
                 dispatch(removeEvent({ id, month, year }));
                 showToast('Event deleted!', 'success');
-                setState((_) => ({ ...state, loading: false }));
+                setState((_) => ({
+                    ...state,
+                    loading: false,
+                    showAlert: false,
+                }));
                 setEvent(null);
             })
             .catch(handleError);
