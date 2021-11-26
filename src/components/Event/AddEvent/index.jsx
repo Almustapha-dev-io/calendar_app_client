@@ -10,7 +10,6 @@ import { postAppointment, updateAppointment } from 'services/appointments';
 import controlValid from 'util/helpers/controlValid';
 import showToast from 'util/helpers/showToast';
 import { addEvent, updateEvent } from 'store/actions';
-import dayjs from 'dayjs';
 
 const AddEvent = () => {
     const dispatch = useDispatch();
