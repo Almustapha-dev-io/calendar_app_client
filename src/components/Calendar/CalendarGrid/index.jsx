@@ -6,8 +6,8 @@ import CalendarDaysHeader from './CalendarDaysHeader';
 import CalendarDayGridItem from './CalendarDayGridItem';
 
 import { CalendarGridContainer } from 'components/ui/Calendar';
-import AddEvent from 'components/AddEvent';
-import SidePanel from 'components/SidePanel';
+import AddEvent from 'components/Event/AddEvent';
+import ViewEvent from 'components/Event/ViewEvent';
 
 import {
     createDaysForCurrentMonth,
@@ -18,8 +18,8 @@ import useMediaQuery from 'hooks/useMediaQuery';
 
 const CalendarGrid = () => {
     const [selectedDate, setSelectedDate] = useState(null);
-    const [calendarGridDays, setCalendarGridDays] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [calendarGridDays, setCalendarGridDays] = useState([]);
 
     const isBigScreen = useMediaQuery('(min-width: 1000px)');
     const calendarState = useSelector((state) => state.calendar);
@@ -74,13 +74,10 @@ const CalendarGrid = () => {
                 close={() => setSelectedDate((_) => null)}
             />
 
-            <SidePanel
+            <ViewEvent
+                event={selectedEvent}
                 close={() => setSelectedEvent((_) => null)}
-                title="Test"
-                show={selectedEvent ? true : false}
-            >
-                <pre>{JSON.stringify(selectedEvent, null, 2)}</pre>
-            </SidePanel>
+            />
 
             <CalendarGridContainer>
                 {isBigScreen && <CalendarDaysHeader />}

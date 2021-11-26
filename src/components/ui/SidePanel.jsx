@@ -3,6 +3,7 @@ import { PRIMARY, DANGER } from 'util/styles/colors';
 
 export const SliderContainer = styled.div`
     position: fixed;
+    height: 100vh;
     left: 0;
     top: 0;
     right: 0;
@@ -18,18 +19,20 @@ export const SliderContainer = styled.div`
 
     .content {
         width: 0px;
-        height: 100%;
+        height: 100vh;
         background-color: #fff;
         margin: 0;
+        padding: 0;
         transition: all .2s ease;
-        
-        * { box-sizing: border-box; }
+        position: relative;
 
         .header {
             margin: 0;
             padding: 1rem;
+            box-sizing: border-box;
             width: 100%;
             display: flex;
+            flex-direction: row-reverse;
             justify-content: space-between;
             align-items: center;
 
@@ -45,16 +48,30 @@ export const SliderContainer = styled.div`
 
         .body {
             width: 100%;
-            height: 100%;
+            // height: 100%;
             margin: 0;
             padding: 1rem;
+            box-sizing: border-box;
+            overflow: auto;
+        }
+
+        .actions {
+            width: 100%;
+            height: 100px;
+            margin: auto 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
         }
     }
 
     &.enter-done {
         opacity: 1;
         pointer-events: visible;
-        .content { width: 100%; }
+        .content { width: 100vw; }
     }
 
     &.exit {
@@ -64,7 +81,7 @@ export const SliderContainer = styled.div`
 
     @media (min-width: 700px) {
         &.enter-done {
-            .content { width: 500px; }
+            .content { width: 450px; }
         }
     }
 `;

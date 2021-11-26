@@ -15,8 +15,8 @@ const AddEvent = (props) => {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
     const calendarState = useSelector((state) => state.calendar);
-    const { form, changeHandler, controls, resetForm } = useForm(formState);
     const [state, setState] = useState({ loading: false });
+    const { form, changeHandler, controls, resetForm } = useForm(formState);
 
     const addEventToStore = useCallback(
         (data) => {

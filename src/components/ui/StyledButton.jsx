@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { PRIMARY } from 'util/styles/colors';
+import { PRIMARY, DANGER } from 'util/styles/colors';
 
 const ButtonBase = styled.button`
     min-height: 2.8rem;
@@ -56,5 +56,15 @@ export const SecondaryButton = styled(ButtonBase)`
 
     &:focus {
         outline: 3px solid ${PRIMARY};
+    }
+`;
+
+export const DangerButton = styled(ButtonBase)`
+    background: ${DANGER};
+    color: #fff;
+    border: none;
+
+    &:focus {
+        outline: 3px solid ${DANGER};
     }
 `;

@@ -179,7 +179,8 @@ export const CalendarGridItemContent = styled.div`
     
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 1rem;
+    grid-row-gap: .3rem;
+    grid-column-gap: .5rem;
     transition: all .2s;
 
     .item {

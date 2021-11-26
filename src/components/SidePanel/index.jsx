@@ -13,9 +13,7 @@ const SidePanel = (props) => {
             unmountOnExit
             timeout={{ enter: 0, exit: 300 }}
         >
-            <SliderContainer
-                onClick={props.close}
-            >
+            <SliderContainer>
                 <div className="content">
                     <div className="header">
                         <h4 className="title">{props.title}</h4>
@@ -23,19 +21,26 @@ const SidePanel = (props) => {
                     </div>
 
                     {props.children && (
-                        <div className="body">{props.children}</div>
+                        <div className="body custom-scroll">
+                            {props.children}
+                        </div>
+                    )}
+
+                    {props.actions && (
+                        <div className="actions">{props.actions}</div>
                     )}
                 </div>
             </SliderContainer>
         </CSSTransition>,
         document.getElementById('root')
-    )
+    );
 };
 
 SidePanel.propTypes = {
     show: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
-    close: PropTypes.func.isRequired
+    close: PropTypes.func.isRequired,
+    actions: PropTypes.element,
 };
 
 export default SidePanel;
