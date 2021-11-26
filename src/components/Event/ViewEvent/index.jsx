@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
 import SidePanel from 'components/SidePanel';
+import Alert from 'components/Alert';
 import { DangerButton, PrimaryButton } from 'components/ui/StyledButton';
 
 const Row = styled.div`
@@ -22,9 +23,15 @@ const Row = styled.div`
     }
 `;
 const ViewEvent = (props) => {
+    const [alert, setAlert] = useState(false);
+
+    const closeAlertHandler = useCallback(() => {
+        setAlert(_ => false)
+    }, []);
+
     const actions = (
         <>
-            <DangerButton>Remove</DangerButton>
+            <DangerButton onClick={() => setAlert(_ => true)}>Remove</DangerButton>
             <PrimaryButton style={{ marginLeft: '15px' }}>Edit</PrimaryButton>
         </>
     );
@@ -36,6 +43,17 @@ const ViewEvent = (props) => {
             show={props.event ? true : false}
             actions={actions}
         >
+            <Alert
+                show={alert}
+                title="Delete Event"
+                onClose={closeAlertHandler}
+                closeText="No, dont"
+                onConfirm={() => setAlert((state) => ({ ...state, show: false }))}
+                confirmText="Please, do"
+            >
+                Are you sure you want to delete this event?
+            </Alert>
+
             {props.event && (
                 <>
                     <Row>
@@ -54,7 +72,11 @@ const ViewEvent = (props) => {
 
                     <Row>
                         <label>Event date</label>
-                        <p>{dayjs(props.event.appointmentDate).format('MMMM DD, YYYY')}</p>
+                        <p>
+                            {dayjs(props.event.appointmentDate).format(
+                                'MMMM DD, YYYY'
+                            )}
+                        </p>
                     </Row>
                 </>
             )}

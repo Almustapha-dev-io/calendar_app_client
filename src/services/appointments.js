@@ -17,3 +17,5 @@ export const postAppointment = (data, token) => {
         }
     });
 };
+
+// export const deleteAppointmen
