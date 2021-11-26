@@ -18,6 +18,14 @@ export const postAppointment = (data, token) => {
     });
 };
 
+export const updateAppointment = (data, id, token) => {
+    return axios.patch(`${BASE_URL}/${id}`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+};
+
 export const deleteAppointment = (id, token) => {
     return axios.delete(`${BASE_URL}/${id}`, {
         headers: {

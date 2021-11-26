@@ -8,4 +8,5 @@ export const SET_MONTH = 'SET_MONTH';
 export const RESET_EVENTS = 'RESET_EVENTS';
 export const SET_EVENTS = 'SET_EVENTS';
 export const ADD_EVENT = 'ADD_EVENT';
+export const UPDATE_EVENT = 'UPDATE_EVENT';
 export const REMOVE_EVENT = 'REMOVE_EVENT';

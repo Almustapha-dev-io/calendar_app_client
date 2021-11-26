@@ -20,6 +20,18 @@ const addEvent = (state, payload) => {
     };
 };
 
+const updateEvent = (state, payload) => {
+    const { date, event } = payload;
+    const updatedEvents = [...state[date]];
+    const eventIndex = updatedEvents.findIndex(e => e._id === event._id);
+    updatedEvents[eventIndex] = event;
+    return {
+        ...state,
+        [date]: updatedEvents
+    };
+
+};
+
 const removeEvent = (state, payload) => {
     const { date, eventId } = payload;
     const events = state[date].filter(event => event._id !== eventId);
@@ -34,7 +46,9 @@ const eventsReducer = (state = initialState, action) => {
         case actionTypes.SET_EVENTS: return setEvents(state, action.payload);
 
         case actionTypes.ADD_EVENT: return addEvent(state, action.payload);
-        
+
+        case actionTypes.UPDATE_EVENT: return updateEvent(state, action.payload);
+
         case actionTypes.REMOVE_EVENT: return removeEvent(state, action.payload);
 
         case actionTypes.RESET_EVENTS: return {};

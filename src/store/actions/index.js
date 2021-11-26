@@ -14,6 +14,7 @@ export {
 
 export {
     addEvent,
+    updateEvent,
     removeEvent,
     setEvents,
     resetEvent

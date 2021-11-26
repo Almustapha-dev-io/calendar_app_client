@@ -20,6 +20,16 @@ export const addEvent = ({ data, month, year }) => {
     };
 };
 
+export const updateEvent = ({ data, month, year }) => {
+    return {
+        type: actionTypes.UPDATE_EVENT,
+        payload: {
+            event: data,
+            date: `${year}-${month}`
+        }
+    }
+};
+
 export const removeEvent = ({ id, month, year}) => {
     return {
         type: actionTypes.REMOVE_EVENT,

@@ -6,21 +6,27 @@ import formState from './addeventForm';
 import Modal from 'components/Modal';
 import { Input, FormGroup } from 'components/ui/StyledInput';
 import useForm from 'hooks/useForm';
-import { postAppointment } from 'services/appointments';
+import { postAppointment, updateAppointment } from 'services/appointments';
 import controlValid from 'util/helpers/controlValid';
 import showToast from 'util/helpers/showToast';
-import { addEvent } from 'store/actions';
+import { addEvent, updateEvent } from 'store/actions';
 
 const AddEvent = (props) => {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
     const calendarState = useSelector((state) => state.calendar);
     const [state, setState] = useState({ loading: false });
-    const { form, changeHandler, controls, resetForm, setInitialValue } = useForm(formState);
+    const { form, changeHandler, controls, resetForm, setInitialValue } =
+        useForm(formState);
 
     const addEventToStore = useCallback(
-        (data) => {
+        (data, update = false) => {
             const { month, year } = calendarState;
+            if (update) {
+                dispatch(updateEvent({ data, month, year }));
+                return;
+            }
+
             dispatch(addEvent({ data, month, year }));
         },
         [calendarState, dispatch]
@@ -48,18 +54,29 @@ const AddEvent = (props) => {
         setState((state) => ({ ...state, loading: false }));
     }, []);
 
-    const saveEvent = () => {
-        const data = {
-            title: form.controls.title.value,
-            details: form.controls.details.value,
-            appointmentDate: props.date.dateString,
-        };
+    const getData = () => ({
+        title: form.controls.title.value,
+        details: form.controls.details.value,
+        appointmentDate: props.date.dateString,
+    });
 
-        postAppointment(data, token)
+    const saveEvent = () => {
+        postAppointment(getData(), token)
             .then((res) => {
                 setState((state) => ({ ...state, loading: false }));
                 addEventToStore(res.data.data);
-                showToast('Event added', 'success');
+                showToast('Event added!', 'success');
+                props.close();
+            })
+            .catch(handleError);
+    };
+
+    const editEvent = () => {
+        updateAppointment(getData(), props.event._id, token)
+            .then((res) => {
+                setState((state) => ({ ...state, loading: false }));
+                addEventToStore(res.data.data, true);
+                showToast('Event updated!', 'success');
                 props.close();
             })
             .catch(handleError);
@@ -69,12 +86,9 @@ const AddEvent = (props) => {
         if (!form.valid) return;
 
         setState((state) => ({ ...state, loading: true }));
-        if (props.event) {
-            // updateEvent();
-            console.log(form);
-        } else {
-            saveEvent();
-        }
+        if (props.event) return editEvent();
+
+        saveEvent();
     };
 
     return (
