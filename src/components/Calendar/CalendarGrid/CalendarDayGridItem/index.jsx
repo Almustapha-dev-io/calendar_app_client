@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 
@@ -11,11 +11,13 @@ import AddSvg from 'components/svg/AddSvg';
 
 import { getDayDo, getDayString } from 'util/helpers/calendar';
 import useMediaQuery from 'hooks/useMediaQuery';
+import { EventContext } from 'context/event-context';
 
 const today = dayjs().format('YYYY-MM-DD');
 
-const CalendarDayGridItem = ({ day, onAdd, eventClicked }) => {
+const CalendarDayGridItem = ({ day }) => {
     const isBigScreen = useMediaQuery('(min-width: 1000px)');
+    const { setEvent, setDate } = useContext(EventContext);
 
     const gridItemClasses = [];
     if (!day.isCurrentMonth) {
@@ -33,7 +35,7 @@ const CalendarDayGridItem = ({ day, onAdd, eventClicked }) => {
 
     let addButton = null;
     if (dayjs(day.dateString).valueOf() > Date.now() && day.isCurrentMonth) {
-        addButton = <AddSvg clicked={onAdd} />;
+        addButton = <AddSvg clicked={() => setDate(day)} />;
     }
     return (
         <>
@@ -48,7 +50,7 @@ const CalendarDayGridItem = ({ day, onAdd, eventClicked }) => {
                         <div
                             key={event._id}
                             className={`item ${gridItemClasses.join(' ')}`}
-                            onClick={() => eventClicked(event)}
+                            onClick={() => setEvent(event)}
                         >
                             {event.title}
                         </div>
@@ -61,8 +63,6 @@ const CalendarDayGridItem = ({ day, onAdd, eventClicked }) => {
 
 CalendarDayGridItem.propTypes = {
     day: PropTypes.object.isRequired,
-    onAdd: PropTypes.func.isRequired,
-    eventClicked: PropTypes.func.isRequired
 };
 
 export default CalendarDayGridItem;

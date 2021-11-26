@@ -15,10 +15,9 @@ import {
     createDaysForPreviousMonth,
 } from 'util/helpers/calendar';
 import useMediaQuery from 'hooks/useMediaQuery';
+import EventContextProvider from 'context/event-context';
 
 const CalendarGrid = () => {
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedEvent, setSelectedEvent] = useState(null);
     const [calendarGridDays, setCalendarGridDays] = useState([]);
 
     const isBigScreen = useMediaQuery('(min-width: 1000px)');
@@ -68,29 +67,21 @@ const CalendarGrid = () => {
     }, [calendarState.year, calendarState.month, currentMonthEvents]);
 
     return (
-        <>
-            <AddEvent
-                date={selectedDate}
-                close={() => setSelectedDate((_) => null)}
-            />
-
-            <ViewEvent
-                event={selectedEvent}
-                close={() => setSelectedEvent((_) => null)}
-            />
+        <EventContextProvider>
+            <AddEvent />
+            <ViewEvent />
 
             <CalendarGridContainer>
                 {isBigScreen && <CalendarDaysHeader />}
+
                 {calendarGridDays.map((day) => (
                     <CalendarDayGridItem
                         day={day}
                         key={day.dateString}
-                        onAdd={() => setSelectedDate((_) => day)}
-                        eventClicked={(event) => setSelectedEvent((_) => event)}
                     />
                 ))}
             </CalendarGridContainer>
-        </>
+        </EventContextProvider>
     );
 };
 

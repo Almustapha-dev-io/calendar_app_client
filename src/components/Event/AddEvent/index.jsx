@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import formState from './addeventForm';
+import { EventContext } from 'context/event-context';
 import Modal from 'components/Modal';
 import { Input, FormGroup } from 'components/ui/StyledInput';
 import useForm from 'hooks/useForm';
@@ -11,8 +11,9 @@ import controlValid from 'util/helpers/controlValid';
 import showToast from 'util/helpers/showToast';
 import { addEvent, updateEvent } from 'store/actions';
 
-const AddEvent = (props) => {
+const AddEvent = () => {
     const dispatch = useDispatch();
+    const { event, date, setDate, setEventAndDate } = useContext(EventContext);
     const token = useSelector((state) => state.auth.token);
     const calendarState = useSelector((state) => state.calendar);
     const [state, setState] = useState({ loading: false });
@@ -33,15 +34,11 @@ const AddEvent = (props) => {
     );
 
     useEffect(() => {
-        if (!props.date) {
-            resetForm();
-        } else {
-            if (props.event) {
-                console.log(props.event);
-                setInitialValue(props.event);
-            }
+        if (!date) resetForm();
+        else {
+            if (event) setInitialValue(event);
         }
-    }, [props.date, props.event, resetForm, setInitialValue]);
+    }, [date, event, resetForm, setInitialValue]);
 
     const handleError = useCallback((err) => {
         let errMessage = 'An unexpected error occured!';
@@ -57,7 +54,7 @@ const AddEvent = (props) => {
     const getData = () => ({
         title: form.controls.title.value,
         details: form.controls.details.value,
-        appointmentDate: props.date.dateString,
+        appointmentDate: event.appointmentDate,
     });
 
     const saveEvent = () => {
@@ -66,18 +63,18 @@ const AddEvent = (props) => {
                 setState((state) => ({ ...state, loading: false }));
                 addEventToStore(res.data.data);
                 showToast('Event added!', 'success');
-                props.close();
+                setDate(null);
             })
             .catch(handleError);
     };
 
     const editEvent = () => {
-        updateAppointment(getData(), props.event._id, token)
+        updateAppointment(getData(), event._id, token)
             .then((res) => {
                 setState((state) => ({ ...state, loading: false }));
                 addEventToStore(res.data.data, true);
                 showToast('Event updated!', 'success');
-                props.close();
+                setEventAndDate({ date: null, event: res.data.data });
             })
             .catch(handleError);
     };
@@ -86,20 +83,20 @@ const AddEvent = (props) => {
         if (!form.valid) return;
 
         setState((state) => ({ ...state, loading: true }));
-        if (props.event) return editEvent();
+        if (event) return editEvent();
 
         saveEvent();
     };
 
     return (
         <Modal
-            show={props.date ? true : false}
-            title={props.event ? 'Update Event' : 'Add Event'}
+            show={date ? true : false}
+            title={event ? 'Update Event' : 'Add Event'}
             closeButtonText="Cancel"
-            onClose={props.close}
+            onClose={() => setDate(null)}
             closeButtonDisabled={state.loading}
             onProceed={submitHandler}
-            proceedText={props.event ? 'Save' : 'Add'}
+            proceedText={event ? 'Save' : 'Add'}
             proceedButtonDisabled={!form.valid || state.loading}
             styleX={{ width: '400px' }}
             buttonLoader={state.loading}
@@ -129,15 +126,8 @@ const AddEvent = (props) => {
                     ))}
                 </FormGroup>
             ))}
-            {/* <pre>{JSON.stringify(props.date, null, 2)}</pre> */}
         </Modal>
     );
-};
-
-AddEvent.propTypes = {
-    close: PropTypes.func.isRequired,
-    date: PropTypes.object,
-    event: PropTypes.object,
 };
 
 export default AddEvent;

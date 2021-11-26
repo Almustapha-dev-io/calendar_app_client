@@ -112,4 +112,4 @@ const CalendarControls = () => {
     );
 };
 
-export default CalendarControls;
+export default React.memo(CalendarControls);

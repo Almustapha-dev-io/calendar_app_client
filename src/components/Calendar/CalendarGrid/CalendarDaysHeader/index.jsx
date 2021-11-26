@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { CalendarDayHeader } from 'components/ui/Calendar';
 import { daysOfWeek } from 'util/helpers/calendar';
 

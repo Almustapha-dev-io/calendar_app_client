@@ -1,6 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
 import { removeEvent } from 'store/actions';
@@ -13,15 +12,15 @@ import { DangerButton, PrimaryButton } from 'components/ui/StyledButton';
 import { PRIMARY } from 'util/styles/colors';
 import showToast from 'util/helpers/showToast';
 import { deleteAppointment } from 'services/appointments';
+import { EventContext } from 'context/event-context';
 
-const ViewEvent = (props) => {
+const ViewEvent = () => {
     const [state, setState] = useState({
         showAlert: false,
-        showEdit: false,
         loading: false,
-        date: null
     });
     const dispatch = useDispatch();
+    const { event, setEvent, setDate } = useContext(EventContext);
     const token = useSelector((state) => state.auth.token);
     const { month, year } = useSelector((state) => state.calendar);
 
@@ -39,27 +38,19 @@ const ViewEvent = (props) => {
     const deleteEvent = () => {
         setState((_) => ({ ...state, loading: true, showAlert: false }));
 
-        const id = props.event._id;
+        const id = event._id;
         deleteAppointment(id, token)
             .then((res) => {
                 dispatch(removeEvent({ id, month, year }));
                 showToast('Event deleted!', 'success');
                 setState((_) => ({ ...state, loading: false }));
-                props.close();
+                setEvent(null);
             })
             .catch(handleError);
     };
 
     const toggleAlert = (showAlert) => {
         setState((state) => ({ ...state, showAlert }));
-    };
-
-    const toggleEdit = (showEdit) => {
-        let date = null;
-        if (showEdit) {
-            date = { dateString: `${year}-${month}` }
-        }
-        setState((state) => ({ ...state, showEdit, date }));
     };
 
     let actions = <Spinner strokeColor={PRIMARY} />;
@@ -71,7 +62,7 @@ const ViewEvent = (props) => {
                 </DangerButton>
 
                 <PrimaryButton
-                    onClick={() => toggleEdit(true)}
+                    onClick={() => setDate({ dateString: `${year}-${month}` })}
                     style={{ marginLeft: '15px' }}
                 >
                     Edit
@@ -82,9 +73,9 @@ const ViewEvent = (props) => {
 
     return (
         <SidePanel
-            close={props.close}
+            close={() => setEvent(null)}
             title="Event details"
-            show={props.event ? true : false}
+            show={event ? true : false}
             actions={actions}
             hideClose={state.loading}
         >
@@ -99,24 +90,20 @@ const ViewEvent = (props) => {
                 Are you sure you want to delete this event?
             </Alert>
 
-            <AddEvent
-                date={state.date}
-                close={() => toggleEdit(false)}
-                event={props.event}
-            />
+            <AddEvent />
 
-            {props.event && (
+            {event && (
                 <>
                     <DetailRow>
                         <label>Title</label>
-                        <p>{props.event.title}</p>
+                        <p>{event.title}</p>
                     </DetailRow>
 
                     <DetailRow>
                         <label>Details</label>
                         <p>
-                            {props.event.details
-                                ? props.event.details
+                            {event.details
+                                ? event.details
                                 : 'This event does not have any details'}
                         </p>
                     </DetailRow>
@@ -124,7 +111,7 @@ const ViewEvent = (props) => {
                     <DetailRow>
                         <label>Event date</label>
                         <p>
-                            {dayjs(props.event.appointmentDate).format(
+                            {dayjs(event.appointmentDate).format(
                                 'MMMM DD, YYYY'
                             )}
                         </p>
@@ -133,11 +120,6 @@ const ViewEvent = (props) => {
             )}
         </SidePanel>
     );
-};
-
-ViewEvent.propTypes = {
-    close: PropTypes.func.isRequired,
-    event: PropTypes.object,
 };
 
 export default ViewEvent;
