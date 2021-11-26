@@ -17,7 +17,7 @@ const SidePanel = (props) => {
                 <div className="content">
                     <div className="header">
                         <h4 className="title">{props.title}</h4>
-                        <CloseSvg clicked={props.close} />
+                        {!props.hideClose && <CloseSvg clicked={props.close} />}
                     </div>
 
                     {props.children && (
@@ -38,6 +38,7 @@ const SidePanel = (props) => {
 
 SidePanel.propTypes = {
     show: PropTypes.bool.isRequired,
+    hideClose: PropTypes.bool,
     title: PropTypes.string.isRequired,
     close: PropTypes.func.isRequired,
     actions: PropTypes.element,

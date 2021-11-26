@@ -34,14 +34,14 @@ const ViewEvent = (props) => {
     }, []);
 
     const deleteEvent = () => {
-        setState((_) => ({ ...state, loading: true }));
+        setState((_) => ({ ...state, loading: true, showAlert: false }));
 
         const id = props.event._id;
         deleteAppointment(id, token)
             .then((res) => {
                 dispatch(removeEvent({ id, month, year }));
                 showToast('Event deleted!', 'success');
-                setState((_) => ({ ...state, loading: false, showAlert: false }));
+                setState((_) => ({ ...state, loading: false }));
                 props.close();
             })
             .catch(handleError);
@@ -72,6 +72,7 @@ const ViewEvent = (props) => {
             title="Event details"
             show={props.event ? true : false}
             actions={actions}
+            hideClose={state.loading}
         >
             <Alert
                 show={state.showAlert}
