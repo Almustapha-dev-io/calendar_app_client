@@ -1,40 +1,70 @@
 import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
-import SidePanel from 'components/SidePanel';
+import { removeEvent } from 'store/actions';
 import Alert from 'components/Alert';
+import Spinner from 'components/ui/Spinner';
+import SidePanel from 'components/SidePanel';
+import { DetailRow } from 'components/ui/StyledInput';
 import { DangerButton, PrimaryButton } from 'components/ui/StyledButton';
+import { PRIMARY } from 'util/styles/colors';
+import showToast from 'util/helpers/showToast';
+import { deleteAppointment } from 'services/appointments';
 
-const Row = styled.div`
-    width: 100%;
-    margin: 0 0 1rem;
-
-    label {
-        display: block;
-        color: #a1a1a1;
-        font-size: 0.8rem;
-        margin: 0;
-    }
-
-    p {
-        margin: 0;
-    }
-`;
 const ViewEvent = (props) => {
-    const [alert, setAlert] = useState(false);
+    const [state, setState] = useState({
+        showAlert: false,
+        loading: false,
+    });
+    const dispatch = useDispatch();
+    const token = useSelector((state) => state.auth.token);
+    const { month, year } = useSelector((state) => state.calendar);
 
-    const closeAlertHandler = useCallback(() => {
-        setAlert(_ => false)
+    const handleError = useCallback((err) => {
+        let errMessage = 'An unexpected error occured!';
+        if (err.response) {
+            const { data } = err.response;
+            errMessage = data.message;
+        }
+
+        showToast(errMessage, 'error');
+        setState((state) => ({ ...state, loading: false }));
     }, []);
 
-    const actions = (
-        <>
-            <DangerButton onClick={() => setAlert(_ => true)}>Remove</DangerButton>
-            <PrimaryButton style={{ marginLeft: '15px' }}>Edit</PrimaryButton>
-        </>
-    );
+    const deleteEvent = () => {
+        setState((_) => ({ ...state, loading: true }));
+
+        const id = props.event._id;
+        deleteAppointment(id, token)
+            .then((res) => {
+                dispatch(removeEvent({ id, month, year }));
+                showToast('Event deleted!', 'success');
+                setState((_) => ({ ...state, loading: false, showAlert: false }));
+                props.close();
+            })
+            .catch(handleError);
+    };
+
+    const toggleAlert = (showAlert) => {
+        setState((state) => ({ ...state, showAlert }));
+    };
+
+    let actions = <Spinner strokeColor={PRIMARY} />;
+    if (!state.loading) {
+        actions = (
+            <>
+                <DangerButton onClick={() => toggleAlert(true)}>
+                    Remove
+                </DangerButton>
+
+                <PrimaryButton style={{ marginLeft: '15px' }}>
+                    Edit
+                </PrimaryButton>
+            </>
+        );
+    }
 
     return (
         <SidePanel
@@ -44,11 +74,11 @@ const ViewEvent = (props) => {
             actions={actions}
         >
             <Alert
-                show={alert}
+                show={state.showAlert}
                 title="Delete Event"
-                onClose={closeAlertHandler}
+                onClose={() => toggleAlert(false)}
                 closeText="No, dont"
-                onConfirm={() => setAlert((state) => ({ ...state, show: false }))}
+                onConfirm={deleteEvent}
                 confirmText="Please, do"
             >
                 Are you sure you want to delete this event?
@@ -56,28 +86,28 @@ const ViewEvent = (props) => {
 
             {props.event && (
                 <>
-                    <Row>
+                    <DetailRow>
                         <label>Title</label>
                         <p>{props.event.title}</p>
-                    </Row>
+                    </DetailRow>
 
-                    <Row>
+                    <DetailRow>
                         <label>Details</label>
                         <p>
                             {props.event.details
                                 ? props.event.details
                                 : 'This event does not have any details'}
                         </p>
-                    </Row>
+                    </DetailRow>
 
-                    <Row>
+                    <DetailRow>
                         <label>Event date</label>
                         <p>
                             {dayjs(props.event.appointmentDate).format(
                                 'MMMM DD, YYYY'
                             )}
                         </p>
-                    </Row>
+                    </DetailRow>
                 </>
             )}
         </SidePanel>

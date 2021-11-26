@@ -132,3 +132,19 @@ export const InputDropdownItem = styled.span`
         border-bottom-right-radius: 6px;
     }
 `;
+
+export const DetailRow = styled.div`
+width: 100%;
+margin: 0 0 1rem;
+
+label {
+    display: block;
+    color: #a1a1a1;
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+`;

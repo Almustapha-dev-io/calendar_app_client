@@ -20,11 +20,22 @@ const addEvent = (state, payload) => {
     };
 };
 
+const removeEvent = (state, payload) => {
+    const { date, eventId } = payload;
+    const events = state[date].filter(event => event._id !== eventId);
+    return {
+        ...state,
+        [date]: events
+    };
+};
+
 const eventsReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_EVENTS: return setEvents(state, action.payload);
 
         case actionTypes.ADD_EVENT: return addEvent(state, action.payload);
+        
+        case actionTypes.REMOVE_EVENT: return removeEvent(state, action.payload);
 
         case actionTypes.RESET_EVENTS: return {};
 

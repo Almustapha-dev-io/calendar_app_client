@@ -14,6 +14,7 @@ export {
 
 export {
     addEvent,
+    removeEvent,
     setEvents,
     resetEvent
 } from './events';
