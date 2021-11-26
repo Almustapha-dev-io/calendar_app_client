@@ -16,7 +16,7 @@ const AddEvent = (props) => {
     const token = useSelector((state) => state.auth.token);
     const calendarState = useSelector((state) => state.calendar);
     const [state, setState] = useState({ loading: false });
-    const { form, changeHandler, controls, resetForm } = useForm(formState);
+    const { form, changeHandler, controls, resetForm, setInitialValue } = useForm(formState);
 
     const addEventToStore = useCallback(
         (data) => {
@@ -29,8 +29,13 @@ const AddEvent = (props) => {
     useEffect(() => {
         if (!props.date) {
             resetForm();
+        } else {
+            if (props.event) {
+                console.log(props.event);
+                setInitialValue(props.event);
+            }
         }
-    }, [props.date, resetForm]);
+    }, [props.date, props.event, resetForm, setInitialValue]);
 
     const handleError = useCallback((err) => {
         let errMessage = 'An unexpected error occured!';
@@ -66,6 +71,7 @@ const AddEvent = (props) => {
         setState((state) => ({ ...state, loading: true }));
         if (props.event) {
             // updateEvent();
+            console.log(form);
         } else {
             saveEvent();
         }
@@ -74,12 +80,12 @@ const AddEvent = (props) => {
     return (
         <Modal
             show={props.date ? true : false}
-            title="Add Event"
+            title={props.event ? 'Update Event' : 'Add Event'}
             closeButtonText="Cancel"
             onClose={props.close}
             closeButtonDisabled={state.loading}
             onProceed={submitHandler}
-            proceedText="Add"
+            proceedText={props.event ? 'Save' : 'Add'}
             proceedButtonDisabled={!form.valid || state.loading}
             styleX={{ width: '400px' }}
             buttonLoader={state.loading}

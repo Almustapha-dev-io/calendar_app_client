@@ -8,6 +8,7 @@ import Alert from 'components/Alert';
 import Spinner from 'components/ui/Spinner';
 import SidePanel from 'components/SidePanel';
 import { DetailRow } from 'components/ui/StyledInput';
+import AddEvent from 'components/Event/AddEvent';
 import { DangerButton, PrimaryButton } from 'components/ui/StyledButton';
 import { PRIMARY } from 'util/styles/colors';
 import showToast from 'util/helpers/showToast';
@@ -16,7 +17,9 @@ import { deleteAppointment } from 'services/appointments';
 const ViewEvent = (props) => {
     const [state, setState] = useState({
         showAlert: false,
+        showEdit: false,
         loading: false,
+        date: null
     });
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
@@ -51,6 +54,14 @@ const ViewEvent = (props) => {
         setState((state) => ({ ...state, showAlert }));
     };
 
+    const toggleEdit = (showEdit) => {
+        let date = null;
+        if (showEdit) {
+            date = { dateString: `${year}-${month}` }
+        }
+        setState((state) => ({ ...state, showEdit, date }));
+    };
+
     let actions = <Spinner strokeColor={PRIMARY} />;
     if (!state.loading) {
         actions = (
@@ -59,7 +70,10 @@ const ViewEvent = (props) => {
                     Remove
                 </DangerButton>
 
-                <PrimaryButton style={{ marginLeft: '15px' }}>
+                <PrimaryButton
+                    onClick={() => toggleEdit(true)}
+                    style={{ marginLeft: '15px' }}
+                >
                     Edit
                 </PrimaryButton>
             </>
@@ -84,6 +98,12 @@ const ViewEvent = (props) => {
             >
                 Are you sure you want to delete this event?
             </Alert>
+
+            <AddEvent
+                date={state.date}
+                close={() => toggleEdit(false)}
+                event={props.event}
+            />
 
             {props.event && (
                 <>
