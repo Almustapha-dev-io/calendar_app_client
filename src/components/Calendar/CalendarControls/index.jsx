@@ -90,6 +90,7 @@ const CalendarControls = () => {
                 placeholder="Month"
                 items={months}
                 initialValue={state.month}
+                blockInput
             />
 
             <DropdownInput
@@ -100,6 +101,7 @@ const CalendarControls = () => {
                 placeholder="Year"
                 items={years}
                 initialValue={state.year}
+                blockInput
             />
 
             <CalendarControlButton

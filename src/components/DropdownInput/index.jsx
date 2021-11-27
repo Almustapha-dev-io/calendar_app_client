@@ -50,7 +50,13 @@ const DropdownInput = (props) => {
         }
     }, [props.initialValue, props.items]);
 
-    const inputChangeHandler = (value) => {
+    const inputChangeHandler = (e) => {
+        if (props.blockInput) {
+            e.preventDefault();
+            return;    
+        }
+
+        const value = e.target.value;
         const updatedList = props.items.filter((i) =>
             i.display.toLowerCase().includes(value.toLowerCase())
         );
@@ -99,7 +105,7 @@ const DropdownInput = (props) => {
                 placeholder={props.placeholder}
                 value={state.display}
                 onClick={inputClickHandler}
-                onChange={(e) => inputChangeHandler(e.target.value)}
+                onChange={(e) => inputChangeHandler(e)}
             />
             {active && (
                 <InputDropdownItems ref={ref} className="custom-scroll">
@@ -145,6 +151,7 @@ DropdownInput.propTypes = {
     styleX: PropTypes.object,
     initialValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     filterList: PropTypes.bool,
+    blockInput: PropTypes.bool
 };
 
 export default DropdownInput;

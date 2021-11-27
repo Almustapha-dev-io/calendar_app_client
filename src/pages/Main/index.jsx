@@ -6,10 +6,14 @@ import { MainWrapper, MainContent } from 'components/ui/PageWrapper';
 import Loader from 'components/ui/Loader';
 
 const Calendar = React.lazy(() => import('pages/Calendar'));
+const Settings = React.lazy(() => import('pages/Settings'));
 
 const Main = () => {
     const { path } = useRouteMatch();
-    const routes = [{ path: `${path}/calendar`, component: Calendar }];
+    const routes = [
+        { path: `${path}/calendar`, component: Calendar },
+        { path: `${path}/settings`, component: Settings },
+    ];
 
     return (
         <MainWrapper>
@@ -19,15 +23,11 @@ const Main = () => {
                         <Route
                             key={route.path}
                             path={route.path}
-                            render={(props) =>
-                                route.lazy ? (
-                                    <Suspense fallback={<Loader />}>
-                                        <route.component {...props} />
-                                    </Suspense>
-                                ) : (
+                            render={(props) => (
+                                <Suspense fallback={<Loader />}>
                                     <route.component {...props} />
-                                )
-                            }
+                                </Suspense>
+                            )}
                         />
                     ))}
                     <Redirect exact from={path} to={`${path}/calendar`} />

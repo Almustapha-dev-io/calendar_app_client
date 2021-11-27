@@ -69,3 +69,18 @@ export const CenterInParent = styled.div`
     align-items: center;
     justify-content: center;
 `;
+
+export const SettingsContainer = styled.div`
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @media (min-width: 350px) {
+        width: 300px;
+    }
+`;
