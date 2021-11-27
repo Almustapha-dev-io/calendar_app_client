@@ -24,10 +24,11 @@ const CalendarGrid = () => {
     const calendarState = useSelector((state) => state.calendar);
     const currentMonthEvents = useSelector((state) => {
         const { month, year } = calendarState;
-        return state.events[`${year}-${month}`] ?? [];
+        return state.events[`${year}-${month}`];
     });
 
     useEffect(() => {
+        console.log('Calendar')
         const currentMonthDays = createDaysForCurrentMonth(
             calendarState.year,
             calendarState.month
@@ -48,20 +49,22 @@ const CalendarGrid = () => {
             ...currentMonthDays,
             ...nextMonthDays,
         ];
-
-        currentMonthEvents.forEach((event) => {
-            const formattedDate = dayjs(event.appointmentDate).format(
-                'YYYY-MM-DD'
-            );
-
-            const gridDay = gridDays.find(
-                (day) => day.dateString === formattedDate
-            );
-
-            if (gridDay) {
-                gridDay.events.push(event);
-            }
-        });
+        
+        if (currentMonthEvents) {
+            currentMonthEvents.forEach((event) => {
+                const formattedDate = dayjs(event.appointmentDate).format(
+                    'YYYY-MM-DD'
+                );
+    
+                const gridDay = gridDays.find(
+                    (day) => day.dateString === formattedDate
+                );
+    
+                if (gridDay) {
+                    gridDay.events.push(event);
+                }
+            });
+        }
 
         setCalendarGridDays((_) => gridDays);
     }, [calendarState.year, calendarState.month, currentMonthEvents]);
