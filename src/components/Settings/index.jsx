@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 
 import ChangeEmail from './ChangeEmail';
+import ChangePassword from './ChangePassword';
 
 import { SettingsContext } from 'context/settings-context';
 import { CenterInParent, SettingsContainer } from 'components/ui/PageWrapper';
@@ -15,6 +16,7 @@ const Settings = () => {
             <SettingsContainer>
 
                 <ChangeEmail />
+                <ChangePassword />
                 
                 <h2>User Settings</h2>
                 <SecondaryButton
