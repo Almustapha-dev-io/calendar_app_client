@@ -15,6 +15,7 @@ export const Input = styled.input`
     font-weight: 500;
     color: ${PRIMARY};
     transition: outline 0.3s ease;
+    resize: none;
 
     &:focus {
         outline: 3px solid ${PRIMARY};
