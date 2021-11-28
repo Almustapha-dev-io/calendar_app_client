@@ -172,7 +172,6 @@ export const CalendayGridItemHeader = styled.div`
 
 export const CalendarGridItemContent = styled.div`
     width: 100%;
-    // height: 100%;
     margin: 0;
     padding: .2rem 1rem;
     box-sizing: border-box;

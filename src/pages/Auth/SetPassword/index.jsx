@@ -33,6 +33,7 @@ const Register = (props) => {
     const handleError = useCallback((err) => {
         if (!err.response) {
             toast('An unexpected errror occured!', { type: 'error' });
+            setState((state) => ({ ...state, loading: false }));
             return;
         }
 
